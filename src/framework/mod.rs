@@ -39,23 +39,23 @@ impl From<&Environment> for url::Url {
 #[derive(Debug, Default, Clone, TypedBuilder)]
 pub struct HeaderParams {
     /// The merchant payer id used on PayPal-Auth-Assertion
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(strip_option, into))]
     pub merchant_payer_id: Option<String>,
     /// Verifies that the payment originates from a valid, user-consented device and application.
     /// Reduces fraud and decreases declines. Transactions that do not include a client metadata ID are not eligible for PayPal Seller Protection.
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(strip_option, into))]
     pub client_metadata_id: Option<String>,
     /// Identifies the caller as a PayPal partner. To receive revenue attribution, specify a unique build notation (BN) code.
     /// BN codes provide tracking on all transactions that originate or are associated with a particular partner.
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(strip_option, into))]
     pub partner_attribution_id: Option<String>,
     /// Contains a unique user-generated ID that the server stores for a period of time. Use this header to enforce idempotency on REST API POST calls.
     /// You can make these calls any number of times without concern that the server creates or completes an action on a resource more than once.
     /// You can retry calls that fail with network timeouts or the HTTP 500 status code. You can retry calls for as long as the server stores the ID.
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(strip_option, into))]
     pub request_id: Option<String>,
     /// Simulate an error. Pass an error code to test through the mock_application_codes header parameter.
-    #[builder(default, setter(strip_option))]
+    #[builder(default, setter(strip_option, into))]
     pub mock_response: Option<String>,
     /// The server returns a minimal response to optimize communication between the API caller and the server
     #[builder(setter(strip_bool))]
@@ -109,11 +109,11 @@ impl HeaderParams {
         if let Some(mock_response) = &self.mock_response {
             ret.push(("PayPal-Mock-Response", mock_response.clone()))
         }
-        
+
         if self.prefer_minimal {
             ret.push(("Prefer", "return=minimal".to_string()))
         } else {
-            ret.push(("Prefer", "return=representation".to_string()))       
+            ret.push(("Prefer", "return=representation".to_string()))
         }
 
         ret

@@ -25,7 +25,14 @@ serde_urlencoded = "0.7"
 dyn-clone = "1.0.20"
 serde_with = "3"
 
-strum_macros = "0.27"
+chrono = { version = "0.4", default-features = false, features = [
+    "clock",
+    "serde",
+    "std",
+    "wasmbind",
+] }
+
+strum = { version = "0.27", features = ["derive", "strum_macros"] }
 
 jsonwebtoken = "9.3"
 base64 = "0.22"
