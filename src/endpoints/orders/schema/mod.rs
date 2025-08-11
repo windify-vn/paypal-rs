@@ -8,10 +8,11 @@ mod instruction;
 pub mod item;
 mod payee;
 mod shipping;
-mod source;
+pub mod source;
 mod supplementary;
 pub mod unit;
 pub mod upc;
+pub mod patch_operation;
 
 #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, Copy)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
