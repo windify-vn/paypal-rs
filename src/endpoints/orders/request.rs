@@ -1,3 +1,4 @@
+use crate::endpoints::orders::schema::context::ConfirmOrderApplicationContext;
 use crate::endpoints::orders::schema::source::PaymentSource;
 use crate::endpoints::orders::schema::source::paypal::PaypalExperienceContext;
 use crate::endpoints::orders::schema::unit::PurchaseUnit;
@@ -53,4 +54,16 @@ pub struct PathOrderItem {
     pub value: Option<serde_json::Value>,
     #[builder(default, setter(strip_option, into))]
     pub from: Option<String>,
+}
+
+#[derive(Debug, Serialize, TypedBuilder)]
+pub struct ConfirmOrderRequest {
+    #[builder(setter(into))]
+    #[serde(skip)]
+    pub order_id: String,
+
+    #[builder(default, setter(strip_option, into))]
+    pub application_context: Option<ConfirmOrderApplicationContext>,
+
+    pub payment_source: PaymentSource,
 }

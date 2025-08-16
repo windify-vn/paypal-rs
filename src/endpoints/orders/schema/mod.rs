@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub mod address;
 pub mod amount;
 pub mod billing_plan;
+pub mod context;
 pub mod countries;
 pub mod instruction;
 pub mod item;

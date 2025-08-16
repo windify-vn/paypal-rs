@@ -1,5 +1,5 @@
 use crate::endpoints::orders::request::{
-    CreateOrderRequest, QueryOrderDetails, UpdateOrderRequest,
+    ConfirmOrderRequest, CreateOrderRequest, QueryOrderDetails, UpdateOrderRequest,
 };
 use crate::endpoints::orders::response::OrderSummary;
 use crate::framework::endpoint::{EndpointSpec, RequestBody, serialize_query};
@@ -54,5 +54,25 @@ impl EndpointSpec for UpdateOrderRequest {
         Some(RequestBody::Json(
             serde_json::to_string(&self.items).unwrap(),
         ))
+    }
+}
+
+impl EndpointSpec for ConfirmOrderRequest {
+    type ResponseType = OrderSummary;
+
+    fn method(&self) -> Method {
+        Method::POST
+    }
+
+    fn path(&self) -> String {
+        format!(
+            "v2/checkout/orders/{}/confirm-payment-source",
+            self.order_id
+        )
+    }
+
+    #[inline]
+    fn body(&self) -> Option<RequestBody> {
+        Some(RequestBody::Json(serde_json::to_string(self).unwrap()))
     }
 }
