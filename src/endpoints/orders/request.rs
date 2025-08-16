@@ -79,3 +79,13 @@ pub struct AuthorizeOrderRequest {
     #[builder(setter(into))]
     pub payment_source: Option<PaymentSource>,
 }
+
+#[derive(Debug, Serialize, TypedBuilder)]
+pub struct CaptureOrderRequest {
+    #[builder(setter(into))]
+    #[serde(skip)]
+    pub order_id: String,
+
+    #[builder(setter(into))]
+    pub payment_source: Option<PaymentSource>,
+}
