@@ -65,5 +65,17 @@ pub struct ConfirmOrderRequest {
     #[builder(default, setter(strip_option, into))]
     pub application_context: Option<ConfirmOrderApplicationContext>,
 
+    #[builder(setter(into))]
     pub payment_source: PaymentSource,
+}
+
+
+#[derive(Debug, Serialize, TypedBuilder)]
+pub struct AuthorizeOrderRequest {
+    #[builder(setter(into))]
+    #[serde(skip)]
+    pub order_id: String,
+    
+    #[builder(setter(into))]
+    pub payment_source: Option<PaymentSource>,
 }
