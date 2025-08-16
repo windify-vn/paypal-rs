@@ -15,7 +15,7 @@ pub struct ApiSuccess<ResultType> {
 
 impl<T> JsonResult for ApiSuccess<T> where T: JsonResult {}
 
-#[derive(Deserialize, Serialize, PartialEq, Eq, Debug)]
+#[derive(Deserialize, Serialize, Clone, PartialEq, Eq, Debug)]
 pub struct HateoasLink {
     pub href: String,
     pub rel: String,

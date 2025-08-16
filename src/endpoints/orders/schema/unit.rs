@@ -14,7 +14,7 @@ pub struct PurchaseUnit {
     /// The API caller-provided external ID for the purchase unit.
     /// Required for multiple purchase units when you must update the order through PATCH.
     /// If you omit this value and the order contains only one purchase unit, PayPal sets this value to default.
-    #[builder(default, setter(strip_option, into))]
+    #[builder(default, setter(into))]
     pub reference_id: Option<String>,
 
     /// The purchase description.
@@ -33,8 +33,16 @@ pub struct PurchaseUnit {
 
     /// The API caller-provided external invoice number for this order.
     /// Appears in both the payer's transaction history and the emails that the payer receives.
-    #[builder(default, setter(strip_option, into))]
+    #[builder(default, setter(into))]
     pub invoice_id: Option<String>,
+
+    /// The PayPal-generated ID for the purchase unit.
+    /// This ID appears in both the payer's transaction history and the emails that the payer receives.
+    /// In addition, this ID is available in transaction and settlement reports that merchants and API callers can use to reconcile transactions.
+    /// This ID is only available when an order is saved by calling v2/checkout/orders/id/save.
+    /// You shouldn't set this field
+    #[builder(default)]
+    pub id: Option<String>,
 
     /// The soft descriptor is the dynamic text used to construct the statement descriptor that appears on a payer's card statement.
     /// If an Order is paid using the "PayPal Wallet",
@@ -45,7 +53,7 @@ pub struct PurchaseUnit {
 
     /// An array of items that the customer purchases from the merchant.
     #[builder(default)]
-    pub items: Vec<PurchaseItem>,
+    pub items: Option<Vec<PurchaseItem>>,
 
     /// The total order amount with an optional breakdown that provides details, such as the total item amount, total tax amount, shipping, handling, insurance, and discounts, if any.
     /// If you specify amount.breakdown, the amount equals item_total plus tax_total plus shipping plus handling plus insurance minus shipping_discount minus discount.

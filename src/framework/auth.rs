@@ -22,7 +22,7 @@ pub enum TokenStorageProvider {
         expiry: Option<Instant>,
     },
     External {
-        storage: Box<dyn TokenStorage>,
+        storage: Box<dyn TokenStorage + Send + Sync>,
     },
 }
 
@@ -83,7 +83,7 @@ impl TokenStorageProvider {
         }
     }
 
-    pub fn new_external(storage: Box<dyn TokenStorage>) -> Self {
+    pub fn new_external(storage: Box<dyn TokenStorage + Send + Sync>) -> Self {
         Self::External { storage }
     }
 

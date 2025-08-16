@@ -40,6 +40,7 @@ pub enum ApiFailure {
     Error(reqwest::StatusCode, ApiError),
     Invalid(reqwest::Error),
     Decoding(serde_json::Error),
+    AccessTokenExpired,
 }
 
 impl Error for ApiFailure {}
@@ -90,6 +91,7 @@ impl fmt::Display for ApiFailure {
             }
             ApiFailure::Invalid(err) => write!(f, "{err}"),
             ApiFailure::Decoding(err) => write!(f, "Decoding Error - {err}"),
+            ApiFailure::AccessTokenExpired => write!(f, "Access Token Expired"),
         }
     }
 }

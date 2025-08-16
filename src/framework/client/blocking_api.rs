@@ -8,6 +8,7 @@ use std::net::SocketAddr;
 use std::time::{Duration, Instant};
 use url::Url;
 
+#[derive(Debug, Clone)]
 pub struct HttpApiClient {
     environment: Environment,
     credentials: Credentials,
@@ -58,7 +59,7 @@ impl HttpApiClient {
         })
     }
 
-    pub fn request<Endpoint>(&mut self, endpoint: &Endpoint) -> ApiResponse<Endpoint::ResponseType>
+    pub fn request<Endpoint>(&self, endpoint: &Endpoint) -> ApiResponse<Endpoint::ResponseType>
     where
         Endpoint: EndpointSpec + Send + Sync,
     {
@@ -66,7 +67,7 @@ impl HttpApiClient {
     }
 
     pub fn request_with_headers<Endpoint>(
-        &mut self,
+        &self,
         endpoint: &Endpoint,
         header_params: &HeaderParams,
     ) -> ApiResponse<Endpoint::ResponseType>
@@ -111,40 +112,13 @@ impl HttpApiClient {
             }
         }
 
-        let token = self.token_storage.token();
-        let token = if self.token_storage.is_expired() || token.is_none() {
-            let request = self
-                .http_client
-                .request(
-                    http::Method::POST,
-                    Url::from(&self.environment)
-                        .join("v1/oauth2/token")
-                        .unwrap(),
-                )
-                .basic_auth(&self.credentials.client_id, Some(&self.credentials.secret))
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .body("grant_type=client_credentials");
+        if self.is_access_token_expired() {
+            return Err(ApiFailure::AccessTokenExpired);
+        }
 
-            let response = request.send()?;
-            if response.status() != http::StatusCode::OK {
-                return Err(ApiFailure::Error(
-                    response.status(),
-                    ApiError {
-                        message: "Client Authentication failed".to_string(),
-                        ..Default::default()
-                    },
-                ));
-            }
-
-            let token: ClientAccessToken = response.json()?;
-
-            self.token_storage.set_token(token.access_token.clone());
-            self.token_storage
-                .set_expiry(Instant::now() + Duration::new(token.expires_in, 0));
-
-            token.access_token
-        } else {
-            token.unwrap_or_default()
+        let token = match self.token_storage.token() {
+            Some(token) => token,
+            None => return Err(ApiFailure::AccessTokenExpired),
         };
 
         request = request.header("Authorization", format!("Bearer {token}"));
@@ -169,5 +143,46 @@ impl HttpApiClient {
             let errors = parsed.unwrap_or_default();
             Err(ApiFailure::Error(status, errors))
         }
+    }
+
+    pub fn get_access_token(&mut self) -> Result<(), ApiFailure> {
+        if !self.is_access_token_expired() {
+            return Ok(());
+        }
+
+        let request = self
+            .http_client
+            .request(
+                http::Method::POST,
+                Url::from(&self.environment)
+                    .join("v1/oauth2/token")
+                    .unwrap(),
+            )
+            .basic_auth(&self.credentials.client_id, Some(&self.credentials.secret))
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body("grant_type=client_credentials");
+
+        let response = request.send()?;
+        if !response.status().is_success() {
+            return Err(ApiFailure::Error(
+                response.status(),
+                ApiError {
+                    message: "Client Authentication failed".to_string(),
+                    ..Default::default()
+                },
+            ));
+        }
+
+        let token: ClientAccessToken = response.json()?;
+
+        self.token_storage.set_token(token.access_token.clone());
+        self.token_storage
+            .set_expiry(Instant::now() + Duration::new(token.expires_in, 0));
+
+        Ok(())
+    }
+
+    pub fn is_access_token_expired(&self) -> bool {
+        self.token_storage.is_expired() || self.token_storage.token().is_none()
     }
 }

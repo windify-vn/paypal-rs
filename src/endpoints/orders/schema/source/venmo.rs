@@ -41,7 +41,7 @@ pub struct VenmoOrderUpdateCallbackConfig {
 #[derive(Debug, Clone, Serialize, Deserialize, TypedBuilder)]
 pub struct VenmoExperienceContext {
     /// The label that overrides the business name in the PayPal account on the PayPal site. The pattern is defined by an external party and supports Unicode.
-    #[builder(default, setter(strip_option, into))]
+    #[builder(default, setter(into))]
     pub brand_name: Option<String>,
 
     /// The location from which the shipping address is derived.

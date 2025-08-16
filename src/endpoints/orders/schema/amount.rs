@@ -128,36 +128,37 @@ pub struct Breakdown {
     /// The subtotal for all items
     /// Must equal the sum of (items[].unit_amount * items[].quantity) for all items.
     /// item_total.value can not be a negative number.
-    pub item_total: Amount,
+    #[builder(default, setter(into))]
+    pub item_total: Option<Amount>,
 
     /// The shipping fee for all items within a given purchase_unit.shipping.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub shipping: Amount,
+    #[builder(default, setter(into))]
+    pub shipping: Option<Amount>,
 
     /// The handling fee for all items within a given purchase_unit.handling.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub handling: Amount,
+    #[builder(default, setter(into))]
+    pub handling: Option<Amount>,
 
     /// The total tax for all items. Required if the request includes purchase_units.items.tax.
     /// Must equal the sum of (items[].tax * items[].quantity) for all items.tax_total.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub tax_total: Amount,
+    #[builder(default, setter(into))]
+    pub tax_total: Option<Amount>,
 
     /// The insurance fee for all items within a given purchase_unit.insurance.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub insurance: Amount,
+    #[builder(default, setter(into))]
+    pub insurance: Option<Amount>,
 
     /// The shipping discount for all items within a given purchase_unit.shipping_discount.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub shipping_discount: Amount,
+    #[builder(default, setter(into))]
+    pub shipping_discount: Option<Amount>,
 
     /// The discount for all items within a given purchase_unit.discount.value
     /// can not be a negative number.
-    #[builder(default)]
-    pub discount: Amount,
+    #[builder(default, setter(into))]
+    pub discount: Option<Amount>,
 }

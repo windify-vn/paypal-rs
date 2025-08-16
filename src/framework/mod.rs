@@ -16,7 +16,7 @@ pub enum Error {
 }
 
 /// Which environment (host path) to use for API calls
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Environment {
     Live,
     Sandbox,
