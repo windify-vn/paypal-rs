@@ -1,7 +1,7 @@
-use crate::endpoints::orders::schema::PaymentIntent;
 use crate::endpoints::orders::schema::source::PaymentSource;
 use crate::endpoints::orders::schema::source::paypal::PaypalExperienceContext;
 use crate::endpoints::orders::schema::unit::PurchaseUnit;
+use crate::endpoints::orders::schema::{PatchOperator, PaymentIntent};
 use serde::Serialize;
 use std::collections::HashMap;
 use typed_builder::TypedBuilder;
@@ -32,4 +32,25 @@ pub struct QueryOrderDetails {
 
     #[builder(default, setter(strip_option, into))]
     pub fields: Option<HashMap<String, String>>,
+}
+
+#[derive(Debug, TypedBuilder)]
+pub struct UpdateOrderRequest {
+    #[builder(setter(into))]
+    pub order_id: String,
+
+    pub items: Vec<PathOrderItem>,
+}
+
+#[derive(Debug, Serialize, TypedBuilder)]
+pub struct PathOrderItem {
+    #[serde(rename = "op")]
+    #[builder(setter(into))]
+    pub operator: PatchOperator,
+    #[builder(setter(into))]
+    pub path: String,
+    #[builder(default, setter(strip_option, into))]
+    pub value: Option<serde_json::Value>,
+    #[builder(default, setter(strip_option, into))]
+    pub from: Option<String>,
 }

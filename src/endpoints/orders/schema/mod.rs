@@ -52,3 +52,15 @@ pub enum OrderStatus {
     /// For these payment sources the payer-action is managed by the scheme itself (eg. through SMS, email, in-app notification, etc).
     PayerActionRequired,
 }
+
+#[derive(Debug, Serialize, Default, Deserialize, Eq, PartialEq, Clone, Copy)]
+#[serde(rename_all = "lowercase")]
+#[allow(missing_docs)]
+pub enum PatchOperator {
+    #[default]
+    Add,
+    Remove,
+    Replace,
+    Move,
+    Copy,
+}

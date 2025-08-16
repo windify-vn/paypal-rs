@@ -1,4 +1,6 @@
-use crate::endpoints::orders::request::{CreateOrderRequest, QueryOrderDetails};
+use crate::endpoints::orders::request::{
+    CreateOrderRequest, QueryOrderDetails, UpdateOrderRequest,
+};
 use crate::endpoints::orders::response::OrderSummary;
 use crate::framework::endpoint::{EndpointSpec, RequestBody, serialize_query};
 use http::Method;
@@ -33,5 +35,24 @@ impl EndpointSpec for QueryOrderDetails {
 
     fn query(&self) -> Option<String> {
         self.fields.as_ref().and_then(serialize_query)
+    }
+}
+
+impl EndpointSpec for UpdateOrderRequest {
+    type ResponseType = OrderSummary;
+
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn path(&self) -> String {
+        format!("v2/checkout/orders/{}", self.order_id)
+    }
+
+    #[inline]
+    fn body(&self) -> Option<RequestBody> {
+        Some(RequestBody::Json(
+            serde_json::to_string(&self.items).unwrap(),
+        ))
     }
 }
