@@ -1,4 +1,6 @@
+use crate::endpoints::orders::schema::carrier::ShipmentCarrier;
 use crate::endpoints::orders::schema::context::ConfirmOrderApplicationContext;
+use crate::endpoints::orders::schema::shipment::ShipmentItem;
 use crate::endpoints::orders::schema::source::PaymentSource;
 use crate::endpoints::orders::schema::source::paypal::PaypalExperienceContext;
 use crate::endpoints::orders::schema::unit::PurchaseUnit;
@@ -69,13 +71,12 @@ pub struct ConfirmOrderRequest {
     pub payment_source: PaymentSource,
 }
 
-
 #[derive(Debug, Serialize, TypedBuilder)]
 pub struct AuthorizeOrderRequest {
     #[builder(setter(into))]
     #[serde(skip)]
     pub order_id: String,
-    
+
     #[builder(setter(into))]
     pub payment_source: Option<PaymentSource>,
 }
@@ -88,4 +89,29 @@ pub struct CaptureOrderRequest {
 
     #[builder(setter(into))]
     pub payment_source: Option<PaymentSource>,
+}
+
+#[derive(Debug, Serialize, TypedBuilder)]
+pub struct PushOrderTrackingRequest {
+    #[builder(setter(into))]
+    #[serde(skip)]
+    pub order_id: String,
+
+    #[builder(setter(into))]
+    pub tracking_number: String,
+
+    #[builder(default, setter(into))]
+    pub carrier_name_other: Option<String>,
+
+    #[builder(setter(into))]
+    pub carrier: ShipmentCarrier,
+
+    #[builder(setter(into))]
+    pub capture_id: String,
+
+    #[builder(setter(strip_bool))]
+    pub notify_payer: bool,
+
+    #[builder(default, setter(strip_option, into))]
+    pub items: Option<Vec<ShipmentItem>>,
 }

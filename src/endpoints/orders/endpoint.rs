@@ -1,4 +1,7 @@
-use crate::endpoints::orders::request::{AuthorizeOrderRequest, CaptureOrderRequest, ConfirmOrderRequest, CreateOrderRequest, QueryOrderDetails, UpdateOrderRequest};
+use crate::endpoints::orders::request::{
+    AuthorizeOrderRequest, CaptureOrderRequest, ConfirmOrderRequest, CreateOrderRequest,
+    PushOrderTrackingRequest, QueryOrderDetails, UpdateOrderRequest,
+};
 use crate::endpoints::orders::response::OrderSummary;
 use crate::framework::endpoint::{EndpointSpec, RequestBody, serialize_query};
 use http::Method;
@@ -75,7 +78,6 @@ impl EndpointSpec for ConfirmOrderRequest {
     }
 }
 
-
 impl EndpointSpec for AuthorizeOrderRequest {
     type ResponseType = OrderSummary;
 
@@ -84,10 +86,7 @@ impl EndpointSpec for AuthorizeOrderRequest {
     }
 
     fn path(&self) -> String {
-        format!(
-            "v2/checkout/orders/{}/authorize",
-            self.order_id
-        )
+        format!("v2/checkout/orders/{}/authorize", self.order_id)
     }
 
     #[inline]
@@ -104,10 +103,24 @@ impl EndpointSpec for CaptureOrderRequest {
     }
 
     fn path(&self) -> String {
-        format!(
-            "v2/checkout/orders/{}/capture",
-            self.order_id
-        )
+        format!("v2/checkout/orders/{}/capture", self.order_id)
+    }
+
+    #[inline]
+    fn body(&self) -> Option<RequestBody> {
+        Some(RequestBody::Json(serde_json::to_string(self).unwrap()))
+    }
+}
+
+impl EndpointSpec for PushOrderTrackingRequest {
+    type ResponseType = OrderSummary;
+
+    fn method(&self) -> Method {
+        Method::POST
+    }
+
+    fn path(&self) -> String {
+        format!("v2/checkout/orders/{}/track", self.order_id)
     }
 
     #[inline]
