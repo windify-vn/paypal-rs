@@ -3,6 +3,7 @@ use crate::endpoints::orders::schema::source::PaymentSource;
 use crate::endpoints::orders::schema::source::paypal::PaypalExperienceContext;
 use crate::endpoints::orders::schema::unit::PurchaseUnit;
 use serde::Serialize;
+use std::collections::HashMap;
 use typed_builder::TypedBuilder;
 
 #[serde_with::skip_serializing_none]
@@ -22,4 +23,13 @@ pub struct CreateOrderRequest {
     /// Customize the payer experience during the approval process for the payment with PayPal.
     #[builder(default, setter(strip_option, into))]
     pub application_context: Option<PaypalExperienceContext>,
+}
+
+#[derive(Debug, TypedBuilder)]
+pub struct QueryOrderDetails {
+    #[builder(setter(into))]
+    pub order_id: String,
+
+    #[builder(default, setter(strip_option, into))]
+    pub fields: Option<HashMap<String, String>>,
 }

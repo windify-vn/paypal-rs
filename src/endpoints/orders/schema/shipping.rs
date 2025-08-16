@@ -29,6 +29,7 @@ pub struct Shipping {
 
     /// An array of shipping options that the payee or merchant offers to the payer to ship or pick up their items.
     #[builder(default)]
+    #[serde(default)]
     pub options: Vec<ShippingOption>,
 
     /// The name of the person to whom to ship the items. Supports only the full_name property.
