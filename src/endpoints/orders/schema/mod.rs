@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod address;
 pub mod amount;
+pub mod authorization;
 pub mod billing_plan;
 pub mod carrier;
 pub mod context;
@@ -10,6 +11,9 @@ pub mod instruction;
 pub mod item;
 pub mod payee;
 pub mod payer;
+pub mod payment;
+pub mod refund;
+pub mod seller;
 pub mod shipment;
 pub mod shipping;
 pub mod source;

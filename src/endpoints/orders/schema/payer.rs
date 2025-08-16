@@ -3,7 +3,7 @@ use crate::endpoints::orders::schema::source::paypal::PaypalTaxInfo;
 use serde::{Deserialize, Serialize};
 
 #[serde_with::skip_serializing_none]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct Payer {
     /// The email address of the payer.
     pub email_address: Option<String>,

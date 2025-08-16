@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::num::ParseFloatError;
 use typed_builder::TypedBuilder;
 
 #[derive(
@@ -82,6 +83,22 @@ pub struct Amount {
     /// For the required number of decimal places for a currency code, see Currency Codes.
     #[builder(setter(into))]
     pub value: String,
+}
+
+impl TryFrom<&Amount> for f64 {
+    type Error = ParseFloatError;
+
+    fn try_from(value: &Amount) -> Result<Self, Self::Error> {
+        value.value.as_str().parse::<f64>()
+    }
+}
+
+impl TryFrom<&Amount> for f32 {
+    type Error = ParseFloatError;
+
+    fn try_from(value: &Amount) -> Result<Self, Self::Error> {
+        value.value.as_str().parse::<f32>()
+    }
 }
 
 impl From<(&str, Currency)> for Amount {

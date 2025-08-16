@@ -2,6 +2,7 @@ use crate::endpoints::orders::schema::amount::AmountBreakdown;
 use crate::endpoints::orders::schema::instruction::PaymentInstruction;
 use crate::endpoints::orders::schema::item::PurchaseItem;
 use crate::endpoints::orders::schema::payee::Payee;
+use crate::endpoints::orders::schema::payment::PurchaseUnitPayment;
 use crate::endpoints::orders::schema::shipping::Shipping;
 use crate::endpoints::orders::schema::supplementary::SupplementaryData;
 use serde::Deserialize;
@@ -77,4 +78,8 @@ pub struct PurchaseUnit {
     /// Contains Supplementary Data.
     #[builder(default, setter(strip_option, into))]
     pub supplementary_data: Option<SupplementaryData>,
+
+    /// The comprehensive history of payments for the purchase unit.
+    #[builder(default)]
+    pub payments: Option<PurchaseUnitPayment>,
 }

@@ -109,7 +109,7 @@ pub struct CaptureOrderRequest {
     pub order_id: String,
 
     /// The ID of the order for which to capture a payment.
-    #[builder(setter(into))]
+    #[builder(default, setter(strip_option, into))]
     pub payment_source: Option<PaymentSource>,
 }
 
