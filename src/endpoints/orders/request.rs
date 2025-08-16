@@ -154,3 +154,16 @@ pub struct PushOrderTrackingRequest {
     #[builder(default, setter(strip_option, into))]
     pub items: Option<Vec<ShipmentItem>>,
 }
+
+#[derive(Debug, TypedBuilder)]
+pub struct UpdateOrderTrackingRequest {
+    /// The ID of the order that the tracking information is associated with.
+    #[builder(setter(into))]
+    pub order_id: String,
+
+    /// The order tracking ID.
+    #[builder(setter(into))]
+    pub tracker_id: String,
+
+    pub items: Vec<PatchOperatorItem>,
+}

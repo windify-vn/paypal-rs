@@ -1,6 +1,6 @@
 use crate::endpoints::orders::request::{
     AuthorizeOrderRequest, CaptureOrderRequest, ConfirmOrderRequest, CreateOrderRequest,
-    PushOrderTrackingRequest, QueryOrderDetails, UpdateOrderRequest,
+    PushOrderTrackingRequest, QueryOrderDetails, UpdateOrderRequest, UpdateOrderTrackingRequest,
 };
 use crate::endpoints::orders::response::OrderSummary;
 use crate::framework::endpoint::{EndpointSpec, RequestBody, serialize_query};
@@ -126,5 +126,27 @@ impl EndpointSpec for PushOrderTrackingRequest {
     #[inline]
     fn body(&self) -> Option<RequestBody> {
         Some(RequestBody::Json(serde_json::to_string(self).unwrap()))
+    }
+}
+
+impl EndpointSpec for UpdateOrderTrackingRequest {
+    type ResponseType = ();
+
+    fn method(&self) -> Method {
+        Method::PUT
+    }
+
+    fn path(&self) -> String {
+        format!(
+            "v2/checkout/orders/{}/trackers/{}",
+            self.order_id, self.tracker_id
+        )
+    }
+
+    #[inline]
+    fn body(&self) -> Option<RequestBody> {
+        Some(RequestBody::Json(
+            serde_json::to_string(&self.items).unwrap(),
+        ))
     }
 }
