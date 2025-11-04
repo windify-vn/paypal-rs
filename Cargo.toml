@@ -9,10 +9,12 @@ keywords = ["paypal", "api", "client"]
 categories = ["api-bindings", "web-programming::http-client"]
 
 [features]
-default = ["default-tls"]
+default = ["default-tls", "rust_crypto"]
 blocking = ["reqwest/blocking"]
 default-tls = ["reqwest/default-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
+rust_crypto = ["jsonwebtoken/rust_crypto"]
+aws_lc_rs = ["jsonwebtoken/aws_lc_rs"]
 spec = []
 
 [dependencies]
@@ -34,11 +36,11 @@ chrono = { version = "0.4", default-features = false, features = [
 
 strum = { version = "0.27", features = ["derive", "strum_macros"] }
 
-jsonwebtoken = "9.3"
+jsonwebtoken = "10.1"
 base64 = "0.22"
 
 thiserror = "2"
-typed-builder = "0.21"
+typed-builder = "0.23"
 url = "2.5"
 
 bytes = "1.10"

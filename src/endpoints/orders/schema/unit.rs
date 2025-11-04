@@ -5,8 +5,7 @@ use crate::endpoints::orders::schema::payee::Payee;
 use crate::endpoints::orders::schema::payment::PurchaseUnitPayment;
 use crate::endpoints::orders::schema::shipping::Shipping;
 use crate::endpoints::orders::schema::supplementary::SupplementaryData;
-use serde::Deserialize;
-use serde_with::serde_derive::Serialize;
+use serde::{Deserialize,Serialize};
 use typed_builder::TypedBuilder;
 
 #[serde_with::skip_serializing_none]
