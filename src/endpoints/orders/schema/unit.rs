@@ -59,7 +59,8 @@ pub struct PurchaseUnit {
     /// If you specify amount.breakdown, the amount equals item_total plus tax_total plus shipping plus handling plus insurance minus shipping_discount minus discount.
     /// The amount must be a positive number. The amount.value field supports up to 15 digits preceding the decimal.
     /// For a list of supported currencies, decimal precision, and maximum charge amount, see the PayPal REST APIs Currency Codes.
-    pub amount: AmountBreakdown,
+    #[builder(default, setter(strip_option, into))]
+    pub amount: Option<AmountBreakdown>,
 
     /// The merchant who receives payment for this transaction.
     #[builder(default, setter(strip_option, into))]
